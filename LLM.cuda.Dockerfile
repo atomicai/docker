@@ -2,6 +2,7 @@ ARG CUDA_IMAGE="12.5.0-devel-ubuntu22.04"
 FROM nvidia/cuda:${CUDA_IMAGE}
 
 # We need to set the host to 0.0.0.0 to allow outside access
+ENV CUDA_TOOLKIT_VERSION=12.5
 ENV HOST=0.0.0.0
 ENV PORT=1228
 ENV CTXSZ=8192
@@ -25,7 +26,7 @@ ENV GGML_CUDA=1
 RUN python3 -m pip install --upgrade pip pytest cmake scikit-build setuptools fastapi uvicorn sse-starlette pydantic-settings starlette-context
 
 # Install llama-cpp-python (build with cuda)
-RUN CMAKE_ARGS="-DGGML_CUDA=on" pip install llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/12.5
+RUN CMAKE_ARGS="-DGGML_CUDA=on" pip install llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/${CUDA_TOOLKIT_VERSION}
 
 # Создаем директорию для весов (по умолчанию)
 RUN mkdir -p ${WEIGHTS_PATH}}
